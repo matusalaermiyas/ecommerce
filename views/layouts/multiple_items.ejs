@@ -1,0 +1,99 @@
+<div class="tab-pane fade in" id="multiple">
+
+    <div class="container">
+        <% if (products.length > 0) { %>
+            <div class="row">
+                <div class="animate__animated animate__backInRight col-sm-6" style="padding: 0; margin-bottom: 7px;">
+                    <a class="btn btn-primary btn-sm" href="/done" id="done">Done</a>
+                </div>
+            </div>
+       
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="row">
+                        <% products.forEach(p => { %>
+                            <div class="product-cart col-sm-3 animate__animated animate__backInDown">
+                                    <img src="<%= p.image %> " alt="<% p.title %> "  style="width: 100%; height: 120px; object-fit: cover;" class="itemImage">
+                                    <div style="padding: 10px;">
+                                        <p style="height: 20px; overflow:hidden">
+                                            <a href="/product/<%= p._id %> ">
+                                                <%= p.title %> 
+                                            </a>
+                                        </p>
+                                        <p style="margin-bottom:  2px !important;">Price: <%= p.price %>  Birr</p>
+                                        <p style="margin-bottom:  2px !important;">Amount</p>
+            
+                                        <input type="hidden" name="ItemName" value="<%= p.title %>" class="item_name">
+                                        <input type="hidden" name="UnitPrice" value="<%= p.price %>" class="unit_price">
+                                        <input type="hidden" name="DeliveryFee" value="<%= p.delivery_fee %>" class="delivery_fee">
+                                        <input type="hidden" name="HandlingFee" value="<%= p.handling_fee %>" class="handling_fee">
+                                        <input type="hidden" name="Discount" value="<%= p.discount %>" class="discount" >
+                                        <input type="hidden" name="Tax1" value="<%= p.tax_1 %>" class="tax_1">
+                                        
+                                        <input type="hidden" name="ItemId" value="<%= p._id %>" class="item_id">
+                                      
+                                        <input type="number" name="Quantity"  class="quantity form-control" style="width: 60px; display: inline-block;" value="1"> 
+                                        <button class="add_to_cart btn btn-primary btn-sm" type="submit" style="display: inline-block;"> 
+                                            <span class="glyphicon glyphicon-shopping-cart"></span>
+                                            Add to cart
+                                        </button>
+                                    </div>        
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+            </div>
+            <% } else {%>
+               <%- include('no_product')  %> 
+            <% } %> 
+    </div>
+</div>
+
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const cartCounter = document.getElementById('cartCounter');
+
+        cartCounter.innerText = jar.get('cart_counter') ? jar.get('cart_counter') : 0;
+
+        $('.add_to_cart').on('click', function(e) {
+            const parent = $(this).parent();
+
+            parent.attr('class', 'animate__animated animate__bounce')
+
+            const ItemId = parent.children('.item_id').val();
+            const Quantity = parent.children('.quantity').val();
+
+            // Optionals just for the label
+            const itemImage = parent.parent().children('.itemImage').attr('src')
+            const itemPrice = parent.children('.unit_price').attr('value');
+            const itemName = parent.children('.item_name').attr('value');
+
+            const item = { Quantity, ItemId, itemImage, itemPrice, itemName };
+
+            let items = jar.get('items');
+
+            if(!items) items = {};
+            else items = JSON.parse(items)
+
+
+          let itemInCart =  Object.keys(items).find(k => k == item.ItemId)
+
+
+            if(!itemInCart) {
+                const counter = parseInt(cartCounter.innerText) + 1;
+                cartCounter.innerText = counter;
+                const ItemId = item.ItemId.toString();
+                items[ItemId] = item;
+                jar.set('cart_counter', counter.toString());
+            }
+            else {
+                itemInCart = items[item.ItemId];
+                itemInCart.Quantity = item.Quantity
+                items[item.ItemId].Quantity = item.Quantity;
+            } 
+
+            jar.set('items', JSON.stringify(items));
+        });
+    })
+</script>

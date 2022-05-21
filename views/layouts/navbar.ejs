@@ -1,0 +1,58 @@
+<div class="col-sm-2">
+  <button class="btn btn-primary visible-xs btn-block" id="toggleNavbar" style="margin-bottom: 10px;">
+    <span class="glyphicon glyphicon-menu-hamburger"></span>
+  </button>
+  <ul class="animate__animated animate__fadeInDownBig nav nav-pills nav-stacked hidden-xs" id="navbar">
+    <li style="margin-bottom: 5px;">
+      <div>
+        <a href="/">
+          <img src="/images/logo.png" alt="" class="img-responsive" id="navbarLogo">
+        </a>
+      </div>
+    </li>
+
+    <li>
+      <form action="/product/search/item" method="POST">
+        <div class="form-group">
+          <input type="search" name="search" class="form-control" placeholder="Search product">
+        </div>
+      </form>
+    </li>
+
+      <li class="all">
+          <a href="/all">
+              All products
+          </a>
+      </li>
+      <li class="clothes">
+          <a href="/clothes">
+              Clothes
+          </a>
+      </li>
+      <li class="cosmetics">
+          <a href="/cosmetics">
+              Cosmetics
+          </a>
+      </li>
+
+      <li class="electronics"><a href="/electronics">Electronics</a></li>
+      <li class="shoes"><a href="/shoes">Shoes</a></li>
+
+      <% if (typeof isLogged == 'undefined') { %>
+        <li><a href="/user/signin">Sign in</a></li>
+      <% } %>
+      
+      <% if (typeof isLogged != 'undefined' && isLogged == true ) { %>
+        <li >
+          <a href="/user/profile" style="display: inline-block;">Profile</a> | <a href="/user/logout" style="display: inline-block;">Logout</a>
+        </li>
+      <% } %>
+
+      <li>
+        <a href="/done">
+          <span class="glyphicon glyphicon-shopping-cart"></span>
+          <span id="cartCounter">0</span>
+        </a>
+      </li>
+  </ul>
+</div>

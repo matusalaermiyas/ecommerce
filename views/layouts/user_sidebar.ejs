@@ -1,0 +1,63 @@
+<div class="col-sm-2">
+  <ul class="animate__animated animate__fadeInDownBig nav nav-pills nav-stacked" id="navbar">
+    <% if (typeof isLogged != 'undefined' && isLogged == true) { %>
+
+    <li class="clothes" style="padding-left: 10px">
+      <img
+        src="<%= profilePicture %> "
+        alt="Profile picture"
+        style="
+          width: 70px;
+          height: 70px;
+          object-fit: cover;
+          border-radius: 35px;
+        "
+      />
+    </li>
+
+    <li class="all">
+      <a href="/all"> Back to shopping </a>
+    </li>
+
+    <li class="orders">
+      <a href="/user/orders"> My orders </a>
+    </li>
+    <li class="rate_product">
+      <a href="/user/rate"> Rate product </a>
+    </li>
+
+    <li>
+      <a href="/user/logout"> Logout </a>
+    </li>
+    <% } %> <% if (typeof isLogged == 'undefined') { %>
+    <li style="margin-bottom: 5px">
+      <img src="/images/logo.png" alt="" class="img-responsive" />
+    </li>
+    <li class="all">
+      <a href="/all"> Back to shopping </a>
+    </li>
+
+    <li class="signin">
+      <a href="/user/signin"> Signin </a>
+    </li>
+    <li class="signup">
+      <a href="/user/signup"> Signup </a>
+    </li>
+    <% } %>
+  </ul>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    let url =
+      window.location.pathname == "/" ? "all" : window.location.pathname;
+
+    if (!url.startsWith("/user")) {
+      if (!url.startsWith("/root")) {
+        if (url != "all") url = url.substring(1);
+        const elem = $("#navbar").children(`.${url}`);
+        elem.addClass("active");
+      }
+    }
+  });
+</script>

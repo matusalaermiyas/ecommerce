@@ -1,0 +1,18 @@
+<%- include('../layouts/header', {"title": "Buy pal | Signin", "userPage": true}) %> 
+<div class="animate__animated animate__fadeInDownBig col-sm-8">
+    <h1 style="padding-left: 130px">Signin</h1>
+    <form action="/user/signin" class="form-horizontal" method="post">
+        <%- include('../layouts/text_input', {"id": "email", "label": "Email", "type": "email"}) %> 
+        <%- include('../layouts/text_input', {"id": "password", "label": "Password", "type": "password"}) %> 
+        <div class="form-group">
+            <label for="btn" class="col-sm-2 control-label"></label>
+            <div class="col-sm-8">
+                <p>
+                    <a href="/user/signup">Don't have an account, create</a>
+                </p>
+                <button class="btn btn-primary" id="btn" type="submit">Login</button>
+            </div>
+        </div>
+    </form>
+</div>
+<%- include('../layouts/footer') %> 

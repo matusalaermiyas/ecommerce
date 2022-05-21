@@ -1,0 +1,25 @@
+<div class="animate__animated animate__fadeInUpBig col-sm-12">
+    <div style="text-align: center;">
+        <h1 style="font-size: 22px; font-weight: bold; text-decoration: underline;">New Arrival Products</h1>
+        <p>Some of our newly arrived products</p>
+    </div>
+
+    <% if (products.length > 0) { %>
+        <% products.forEach(p => { %>
+            <div class="product-cart col-sm-3" style="margin: 0 !important; margin-bottom: 10px !important;">
+                <img src="<%= p.image %> " alt="<%= p.title %>" style="width: 100%; height: 120px; object-fit: cover">
+                <div style="padding: 20px">
+                    <form action="/product/search/item" method="POST">
+                        <input type="hidden" name="search" value="<%= p.title %>">
+                        <button type="submit" class="btn-link" style="padding: 0; height: 20px; overflow:hidden">
+                                <%= p.title %> 
+                        </button>
+                    </form>
+                    <p>Price <%= p.price %> Birr</p>
+                </div>
+            </div>
+        <% }) %>
+    <% } else {%>
+        <%- include('no_product')  %> 
+    <% } %> 
+</div>

@@ -1,0 +1,30 @@
+<%- include('../layouts/header', {'title': "BuyPal | Add product admin"}) %>
+<div class="col-sm-8">
+    <h1 style="padding-left: 130px; font-weight: bold;">Add product</h1>
+    <form  action="/root/add" method="POST"  class="form-horizontal" id="form">
+            <%- include('../layouts/text_input', {'id': 'title', 'label': 'Title', 'type': 'text'}) %> 
+            <%- include('../layouts/text_input', {'id': 'price', 'label': 'Price', 'type': 'text'}) %> 
+            <%- include('../layouts/text_input', {'id': 'item_in_stock', 'label': 'Item in stock', 'type': 'text'}) %> 
+            <%- include('../layouts/text_input', {'id': 'delivery_fee', 'label': 'Delivery Fee', 'type': 'text'}) %> 
+            <%- include('../layouts/text_input', {'id': 'handling_fee', 'label': 'Handling Fee', 'type': 'text'}) %> 
+            <%- include('../layouts/text_input', {'id': 'discount', 'label': 'Discount', 'type': 'text'}) %> 
+            <%- include('../layouts/text_input', {'id': 'tax_1', 'label': 'Tax', 'type': 'text'}) %> 
+            <%- include('../layouts/select_input', {'id': 'type', 'label': 'Type', 'options': ['Clothes', 'Cosmetics', 'Electronics', 'Shoes']}) %>
+            <%- include('../layouts/select_input', {'id': 'status', 'label': 'Status', 'options': ['New', 'Used']}) %>
+            <%- include('../layouts/text_area', {'id': 'description', 'label': 'Description'}) %>
+            <input type="hidden" name="image_url" id="image_url">
+
+            <div class="form-group">
+                <label for="image" class="col-sm-2 control-label">Image</label>
+
+                <div class="col-sm-8">
+                    <input type="file" name="image" id="image">
+                    <p class="help-block">Only images</p>
+                    <button type="submit" class="btn btn-primary" id="add">Add</button>
+                </div>
+            </div>
+        </form>
+</div>
+
+<%- include('../firebase/add_product') %>  
+<%- include('../layouts/footer') %>  

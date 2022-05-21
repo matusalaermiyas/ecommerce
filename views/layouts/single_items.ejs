@@ -1,0 +1,107 @@
+<div class="tab-pane fade in active" id="single">
+    <div class="container">
+        <% if (products.length > 0) { %>
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="row">
+                        <% products.forEach(p => { %>
+                            <div class="product-cart animate__animated animate__backInDown col-sm-3">
+                                <form action="/payment/express" method="POST">
+                                    <img src="<%= p.image %> " alt="<% p.title %> "  style="width: 100%; height: 120px !important; object-fit: cover;" >
+                                    <div style="padding: 10px;">
+                                        <p style="height: 20px; overflow:hidden">
+                                            <a href="/product/<%=p._id%>">
+                                                <%= p.title %>
+                                            </a>
+                                        </p>
+                                        <p>Price: <%= p.price %>  Birr</p>
+                                        <p>Amount</p>
+                                        
+                                       
+                                        <input type="hidden" class="product_id" name="product_id" value="<%= p._id %>">
+                                        <input type="hidden" name="buyerName"  class="buyerName">
+                                        <input type="hidden" name="phone"  class="phone">      
+                                        <input type="hidden" name="buyer_id" class="buyer_id">
+            
+                                        <input type="number" name="Quantity" id="quantity" class="form-control" style="width: 60px; display: inline-block;" value="1"> 
+                                        <button class="buy btn btn-primary" type="submit" style="display: inline-block;"> 
+                                            <span class="glyphicon glyphicon-bed" style="display: inline;"></span>
+                                            Order now
+                                        </button>
+                                    </div>
+                                </form>
+            
+                            </div>
+                            <% }) %>
+                    </div>
+                </div>
+            </div>
+        <% } else {%>
+            <%- include('no_product')  %> 
+        <% } %> 
+    </div>
+</div>
+
+<script src="/js/axios.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        $('.buy').on('click', async function(e) {
+            e.preventDefault()
+
+            const parent = $(this).parent();
+
+            try
+            {
+                const {data} = await axios.post("/check/express", {
+                    product_id: parent.children('.product_id').val(),
+                    quantity: parent.children("#quantity").val()
+                });
+
+                if(!data.result) 
+                {
+                    Swal.fire({ icon: 'error', title: `We have ${data.available} ${data.label} in stock lower it little`, text: "Try to lower", width: '40%'})
+                    return;
+                }
+
+            }
+            catch(err)
+            {
+                Swal.fire({ icon: 'error', title: 'Unexpected error, may be check your internet connection', text: details, width: '40%'})
+                return;
+            }
+
+            const { value } = await Swal.fire({
+            title: "Your info",
+            html: '<input id="swal-input1" class="swal2-input" placeholder="Name">' + '<input id="swal-input2" class="swal2-input" placeholder="Phone">',
+            focusConfirm: false,
+            preConfirm: () => {
+                return [
+                    document.getElementById('swal-input1').value,
+                    document.getElementById('swal-input2').value
+                ]
+                }
+            });
+
+            if(!value || value[0] == '' || value[1] == '') 
+            {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops',
+                    text: 'Fill all forms correctly'
+                })
+                return;
+            }
+
+           
+           const user = jar.get('user')
+
+           parent.children('.buyerName').attr('value', value[0]);
+           parent.children('.phone').attr('value', value[1])
+           parent.children('.buyer_id').attr('value', user);
+
+           parent.parent().submit();
+        })
+
+    })
+</script>

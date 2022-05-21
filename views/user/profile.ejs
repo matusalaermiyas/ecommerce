@@ -1,0 +1,16 @@
+<%- include('../layouts/header', {"title": "Buy pal | Profile", "isLogged": isLogged, "user_id": user_id, "userPage": true, "profilePicture": profilePicture}) %> 
+<div class="animate__animated animate__fadeInDownBig col-sm-8">
+    <h1>Welcome back our customer</h1>
+    <p style="font-weight: bold">Now you can</p>
+    <ul class="list-unstyled">
+        <li>
+            <span class="glyphicon glyphicon-hand-right"></span>
+            <a href="/user/orders">Track your orders</a>
+        </li>
+        <li>
+            <span class="glyphicon glyphicon-hand-right"></span>
+            <a href="/user/rate">Rate a product</a>
+        </li>
+    </ul>
+</div>
+<%- include('../layouts/footer') %> 

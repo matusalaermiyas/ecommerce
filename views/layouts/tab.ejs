@@ -1,0 +1,10 @@
+<ul class="nav nav-tabs" id="tabs">
+    <li class="active"><a href="#single" data-toggle="tab" style="font-weight: bold;">Buy Single Item</a></li>
+    <li><a href="#multiple" data-toggle="tab" style="font-weight: bold;">Buy Multiple Item</a></li>
+</ul>
+
+<div class="tab-content" id="tab_content">
+    <br>
+    <%- include('single_items', {"products": products}) %> 
+    <%- include('multiple_items', {"products": products}) %>  
+</div>

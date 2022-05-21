@@ -1,0 +1,11 @@
+<%- include('layouts/header', {"title": "BuyPal | Welcome", "isLogged": isLogged}) %>
+
+<div class="col-sm-10">
+    <%- include('layouts/carousel')  %> 
+    <div class="row">
+        <%- include('layouts/featured_products', {"products": featured})  %> 
+        <%- include('layouts/new_arrival_products', {"products": newArrival})  %> 
+        <%- include('layouts/categories') %> 
+    </div>
+</div>
+<%- include('layouts/footer') %>

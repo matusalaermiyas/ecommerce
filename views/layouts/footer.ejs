@@ -1,0 +1,104 @@
+<% if (typeof pages != 'undefined' && pages > 1) { %>
+        <div class="col-sm-7 col-md-offset-2" style="padding: 12px;">
+            <ul class="pagination">
+                <% for( let index = 1; index <= pages; index++ ) { %>
+                    <li 
+                        <% if (index == currentPage) { %>
+                            class='active'
+                            <% } %>
+                        ><a href="<%= page + "?page=" + index %>"><%= index %> </a>
+                    </li>
+                <% } %>
+            </ul>
+        </div>
+<% } %>
+
+</div>
+
+<div class="container">
+    <div class="row" style="margin-top: 50px">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-10">
+            <div class="row">
+                <div class="col-sm-6" style="padding: 0px;">
+                    <h1 style="font-size: 15px;">Help and Contact</h1>
+                    <ul style="list-style: none; padding: 0px;">
+                        <li>
+                            <a href="/org/about">
+                                About us
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/org/shipping">
+                                Shipping and return
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/org/faq">
+                                FAQ
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/org/payment">
+                                Supported payment
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/org/privacy">
+                                Privacy Policy
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-6" style="padding: 0">
+                    <h1 style="font-size: 15px;">Easy Online Shopping</h1>
+                    <ul style="list-style: none; padding: 0;">
+                        <li>
+                            <a href="/org/track">
+                                Order Track
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/org/contact">
+                                Contact us
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jar.amd.min.js"></script>
+<script src="/js/sweetalert.min.js"></script>
+<script src="/raty/jquery.raty.min.js"></script>
+<script src="/js/activate_bars.js"></script>
+<script>
+    const type=  jar.get('type');
+    const details = decodeURI(jar.get('details'))
+
+    switch(type)
+    {
+        // you can include one option at last to specify the width
+        case 'error':
+            Swal.fire({ icon: 'error', title: 'Error', text: details})
+            break;
+        
+        case 'success':
+            Swal.fire( 'Success', details, 'success' )
+            break;
+
+        case 'info':
+            Swal.fire({ icon: 'info', title: 'Info', text: details})
+            break;
+    }
+
+    jar.remove('type')
+    jar.remove('details')
+</script>
+</body>
+

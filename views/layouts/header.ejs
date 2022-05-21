@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= title %>  </title>
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/custom.css">
+    <link rel="stylesheet" type="text/css" href="/css/sweetalert2.css">
+    <link rel="stylesheet" type="text/css" href="/raty/jquery.raty.css">
+
+</head>
+
+<!-- background-color: #e2e8f0;  -->
+<body style="margin-top: 20px; padding: 20px;">
+    <div class="container">
+        <div class="row">
+            <% if ( typeof userPage == 'undefined' ) { %>
+                <%- include('navbar', {'isLogged': isLogged}) %> 
+            <% } %>
+
+            <% if (typeof userPage !=  'undefined') { %>
+
+                <% if (typeof isLogged != 'undefined' && isLogged == true) { %>
+                    <%- include('./user_sidebar', {'isLogged': true, 'user_id': user_id}) %> 
+                <% } else { %>
+                    <%- include('./user_sidebar') %> 
+                <% } %>
+
+            <% } %> 

@@ -1,0 +1,108 @@
+<div id="gallery" class="animate__animated animate__backInRight carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="#gallery" data-slide-to="0" class="active"></li>
+    <li data-target="#gallery" data-slide-to="1"></li>
+    <li data-target="#gallery" data-slide-to="2"></li>
+    <li data-target="#gallery" data-slide-to="3"></li>
+    <li data-target="#gallery" data-slide-to="4"></li>
+  </ol>
+
+  <div class="carousel-inner">
+    <div class="item active" style="width: 100%">
+      <img
+        src="/images/carousel/welcome.jpg"
+        style="width: 100%; height: 400px; object-fit: cover"
+        alt="First slide"
+      />
+      <div class="carousel-caption" style="font-size: 15px">
+        <h1 style="background-color: rgba(0, 0, 0, 0.7); width: fit-content">
+          Welcome to Buypal
+        </h1>
+        <p style="background-color: rgba(0, 0, 0, 0.7); width: fit-content">
+          We serve you the best,
+          <br> We accept payment with Yenepay
+          <div style="width: 50px;">
+            <img src="/images/yenepay.png" alt="Yenepay Logo" class="img-responsive">
+          </div>
+        </p>
+      </div>
+    </div>
+    <div class="item" style="width: 100%">
+      <img
+        src="/images/carousel/avengers_tshirt.jpg"
+        style="width: 100%; height: 400px; object-fit: cover"
+        alt="First slide"
+      />
+      <div class="carousel-caption" style="font-size: 15px">
+        <h1 style="background-color: rgba(0, 0, 0, 0.7); width: fit-content">
+          Clothes
+        </h1>
+        <p style="background-color: rgba(0, 0, 0, 0.7); width: fit-content">
+          Nice and quality clothes
+        </p>
+      </div>
+    </div>
+    <div class="item" style="width: 100%">
+      <img
+        src="/images/carousel/dove_shampoo.jpg"
+        style="width: 100%; height: 400px; object-fit: cover"
+        alt="Second slide"
+      />
+      <div class="carousel-caption" style="font-size: 15px">
+        <h1 style="background-color: rgba(0, 0, 0, 0.7); width: fit-content">
+          Cosmetics
+        </h1>
+        <p style="background-color: rgba(0, 0, 0, 0.7); width: fit-content">
+          Medically examined suitable cosmetics
+        </p>
+      </div>
+    </div>
+    <div class="item" style="width: 100%">
+      <img
+        src="/images/carousel/gaming_pc.jpg"
+        style="width: 100%; height: 400px; object-fit: cover"
+        alt="Third slide"
+      />
+      <div class="carousel-caption" style="font-size: 15px">
+        <h1 style="background-color: rgba(0, 0, 0, 0.7); width: fit-content">
+          Electronics
+        </h1>
+        <p style="background-color: rgba(0, 0, 0, 0.7); width: fit-content">
+          Original electronic items
+        </p>
+      </div>
+    </div>
+
+    <div class="item" style="width: 100%">
+      <img
+        src="/images/carousel/nike_red_shoe.jpg"
+        style="width: 100%; height: 400px; object-fit: cover"
+        alt="Third slide"
+      />
+      <div class="carousel-caption" style="font-size: 15px">
+        <h1 style="background-color: rgba(0, 0, 0, 0.7); width: fit-content">
+          Shoes
+        </h1>
+        <p style="background-color: rgba(0, 0, 0, 0.7); width: fit-content">
+          Brand and quality shoes
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <a href="#gallery" class="carousel-control left" data-slide="prev">
+    &lsaquo;
+  </a>
+
+  <a href="#gallery" class="carousel-control right" data-slide="next">
+    &rsaquo;
+  </a>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", (e) => {
+    $(".carousel").carousel({
+      interval: 2500,
+    });
+  });
+</script>

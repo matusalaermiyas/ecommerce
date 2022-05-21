@@ -1,0 +1,60 @@
+<script type="module">
+    let productType = $('#type').val();
+    let imageUploaded = false;
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
+    import {
+    getStorage,
+    ref,
+    uploadBytes,
+    getDownloadURL,
+    } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-storage.js";
+
+    $('#type').on("change", function(e) {
+        productType = $(this).val().toLowerCase();
+    });
+
+    const firebaseConfig = {
+    apiKey: "AIzaSyAZWaP81L4cH9OroQVlXQDC8KZjr7PaQ10",
+    authDomain: "lyricallly.firebaseapp.com",
+    projectId: "lyricallly",
+    storageBucket: "lyricallly.appspot.com",
+    messagingSenderId: "1024559380495",
+    appId: "1:1024559380495:web:50f3ab1225ae00ffcacb7a",
+    measurementId: "G-BPMQZ1H4FQ",
+    };
+
+    // Initialize Firebase
+    initializeApp(firebaseConfig);
+
+    const storage = getStorage();
+
+    $('#image').on('change', e => {
+        const image = e.target.files[0];
+        let uuid = self.crypto.randomUUID();
+
+        if (!productType) return Swal.fire({ icon: 'info', title: 'Info', text: 'Choose the product type first'})
+     
+        const choice = confirm("Upload the image");
+        
+        if (!choice) return;
+
+        const name = `/products/${productType.toLowerCase()}/${uuid}${image.name}`;
+
+        const imagesRef = ref(storage, name);
+
+        uploadBytes(imagesRef, image).then(async (snapshot) => {
+            const url = await getDownloadURL(ref(storage, name));
+            imageUploaded = true;
+            $('#image_url').attr("value", url)
+            Swal.fire( 'Success', "Uploaded successfully", 'success' )
+            
+        });
+    });
+
+    $('#add').on('click', e => {
+        e.preventDefault();
+        if(!imageUploaded) return alert('Upload the product image first')
+        $('#form').submit();
+    })
+</script>

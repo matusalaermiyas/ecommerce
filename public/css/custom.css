@@ -1,0 +1,17 @@
+@font-face {
+    font-family: "Montserrat";
+    src: url('../fonts/nunito.ttf');
+}
+
+body {
+    font-family: 'Montserrat';
+}
+
+.product-cart {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; 
+    padding: 0px;
+    border-radius: 7px;
+    margin-right: 20px;
+    margin-bottom: 15px; 
+    overflow: hidden;
+}

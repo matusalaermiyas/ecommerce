@@ -1,0 +1,32 @@
+<%- include('../layouts/header', {"title": "BuyPal | My orders", "isLogged": isLogged, "user_id": user_id, "userPage": true, "profilePicture": profilePicture}) %>
+
+<div class="animate__animated animate__fadeInDownBig col-sm-8">
+	<% if (orders.length > 0) { %>
+		<% orders.forEach(order => { %>
+			<div class="row">
+				<div class="col-sm-12">
+					<p style="font-weight: bold;">
+						Order on day <%= order.order_day %> 
+					</p>
+				</div>
+				<% order.items.forEach(item => { %>
+					<div class="product-cart col-sm-4" style="padding-left: 10px; padding-top: 10px;">
+						<p>Item Name : <%= item.itemName %> </p>
+						<p>Quantity :<%= item.quantity  %> </p>
+						<p>Unit Price : <%= item.price %> Birr</p>
+						<p>Payed: 
+							<% if (order.payed) { %> <%= "Yes" %> <% } else {%> <%= "No" %>  <% } %> 
+						</p>
+						<p>
+							Delivered :   <% if (order.delivered) { %> <%= "Yes" %> <% } else {%> <%= "No" %>  <% } %> 
+						</p>
+					</div>
+				<% }) %>
+			</div>
+		<% }) %>
+	<% } else {%>
+		<p style="font-size: 1.5rem; font-weight: bold; padding-top: 10px;" class="animate__animated animate__shakeX">No orders so far</p>
+	<% } %> 
+</div>
+
+<%- include('../layouts/footer') %>

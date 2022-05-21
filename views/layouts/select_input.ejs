@@ -1,0 +1,11 @@
+<div class="form-group">
+    <label for="type" class="col-sm-2 control-label"><%= label %> </label>
+
+    <div class="col-sm-8">
+        <select name="<%= id %>" id="<%= id %>" class="form-control">
+            <% options.forEach(o => { %>
+                <option value="<%= o %>"><%= o %></option>
+            <% }) %>
+        </select>
+    </div>
+</div>
