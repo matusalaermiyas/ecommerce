@@ -28,10 +28,11 @@ function sendEmail(messages) {
   transporter.sendMail(mailOptions, async (err, info) => {
     if (err) {
       console.log('Error while sending email')
-      const error = new Errors({
-          happend_day: day().format("DD/MM/YYYY"),
-          message_was: messages
-      })
+      console.log(err)
+      // const error = new Errors({
+      //     happend_day: day().format("DD/MM/YYYY"),
+      //     message_was: messages
+      // })
 
       await error.save();
     }
