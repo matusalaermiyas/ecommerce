@@ -34,7 +34,7 @@ function sendEmail(messages) {
       //     message_was: messages
       // })
 
-      await error.save();
+      // await error.save();
     }
   });
 }
