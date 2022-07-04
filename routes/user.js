@@ -1,10 +1,11 @@
-const Joi = require("joi");
-const router = require("express").Router();
 const { validate } = require("deep-email-validator");
+const Joi = require("joi");
 const bcrypt = require("bcryptjs");
+const router = require("express").Router();
 
 const { checkIfUserLogged, guardUserRoute } = require("../middlewares");
 const { Users, Orders, Products, Rates } = require("../models");
+const getImage = require('../config/decodeImage');
 
 router.get("/signin", checkIfUserLogged, (req, res) => {
   return res.render("user/signin");
@@ -41,7 +42,6 @@ router.get("/signup", checkIfUserLogged, (req, res) => {
 
 router.post("/signup", async (req, res) => {
   const url = "/user/signup";
-
   const formData = req.body;
 
   const { error } = validateSignup(formData);
@@ -50,7 +50,6 @@ router.post("/signup", async (req, res) => {
     return res
       .cookie("type", "error")
       .cookie("details", error.details[0].message)
-      .cookie("previousProfile", formData.previousProfile)
       .redirect(url);
   }
 
@@ -60,7 +59,6 @@ router.post("/signup", async (req, res) => {
     return res
       .cookie("type", "error")
       .cookie("details", "The email you entered doesn't exist")
-      .cookie("previousProfile", formData.previousProfile)
       .redirect(url);
   }
 
@@ -70,10 +68,12 @@ router.post("/signup", async (req, res) => {
     return res
       .cookie("type", "error")
       .cookie("details", "Email already taken try another one")
-      .cookie("previousProfile", formData.previousProfile)
       .redirect(url);
   }
 
+  const profilePicture = await getImage(req.files ? req.files.profile_picture : null);
+
+  
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(formData.password, salt);
 
@@ -81,7 +81,7 @@ router.post("/signup", async (req, res) => {
     username: formData.username,
     email: formData.email,
     password: hashedPassword,
-    profile_picture: formData.profile_url,
+    profile_picture: profilePicture
   });
 
   return res
@@ -162,9 +162,6 @@ function validateSignup(data) {
     username: Joi.string().required().label("Username"),
     email: Joi.string().email().label("Email"),
     password: Joi.string().required("Password"),
-    profile_url: Joi.string().required().label("Profile picture"),
-    profile_picture: Joi.string(),
-    previousProfile: Joi.string(),
   });
 
   return schema.validate({ ...data });

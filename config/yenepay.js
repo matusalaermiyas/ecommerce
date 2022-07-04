@@ -4,10 +4,12 @@ const yenepay = require("yenepaysdk");
 const day = require("dayjs");
 const uuid = require("uuid");
 
-const {Orders, Products} = require('../models')
-const sendEmail = require("./email");
+const { Orders, Products } = require("../models");
 
-const redirectURL = '/all'
+const sendEmail = require("../utility/email");
+const sendSms = require("../utility/sms");
+
+const redirectURL = "/all";
 
 const {
   currency,
@@ -30,10 +32,17 @@ router.post("/express", async (req, res) => {
 
   const selectedProduct = await Products.findById(checkoutItem.product_id);
 
-  if (!selectedProduct) return res.cookie('type', 'error').cookie('details', 'Unexpected error product not found').redirect(redirectURL);
+  if (!selectedProduct)
+    return res
+      .cookie("type", "error")
+      .cookie("details", "Unexpected error product not found")
+      .redirect(redirectURL);
 
   if (checkoutItem.Quantity > selectedProduct.item_in_stock)
-    return res.cookie('type', 'error').cookie('details', 'The item you selected is out of stock').redirect(redirectURL);
+    return res
+      .cookie("type", "error")
+      .cookie("details", "The item you selected is out of stock")
+      .redirect(redirectURL);
 
   let order = new Orders({
     order_id: merchantOrderId,
@@ -111,13 +120,19 @@ router.post("/cart", async (req, res) => {
   for (let i = 0; i < checkoutItems.length; i++) {
     let id = checkoutItems[i].ItemId.trim();
 
-    if(!mongoose.isValidObjectId(id)) return res.redirect(redirectURL)
+    if (!mongoose.isValidObjectId(id)) return res.redirect(redirectURL);
 
     const item = await Products.findById(id);
 
     // Check if that item quantity is less
     if (checkoutItems[i].Quantity > item.item_in_stock)
-      return res.cookie('type', 'error').cookie('details', `We have ${item.item_in_stock} ${item.title} in stock so lower a little`).redirect(redirectURL);
+      return res
+        .cookie("type", "error")
+        .cookie(
+          "details",
+          `We have ${item.item_in_stock} ${item.title} in stock so lower a little`
+        )
+        .redirect(redirectURL);
 
     items.push({
       itemName: item.title,
@@ -174,7 +189,7 @@ router.post("/ipnurl", async (req, res) => {
     const ipnStatus = yenepay.checkout.IsIPNAuthentic(ipnModel, useSandbox);
     return res.json({ "IPN Status": ipnStatus });
   } catch (ex) {
-    console.log('Error in /ipnurl catch block')
+    console.log("Error in /ipnurl catch block");
     return res.json({ Error: ex });
   }
 });
@@ -209,7 +224,7 @@ router.get("/success", async (req, res) => {
     });
 
     sendEmail(message); // Send the email to the admin to proceess the order
-
+    sendMessage(order.phone, "Payed successfully will start delivery.");
 
     return res
       .cookie("type", "success")

@@ -1,5 +1,6 @@
 const path = require("path");
 const cookie = require("cookie-parser");
+const fileUpload = require('express-fileupload');
 const express = require("express");
 const session = require("express-session");
 const cors = require('cors');
@@ -37,6 +38,7 @@ module.exports = (app) => {
   app.use(express.static(path.join(process.cwd(), "public")));
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use(fileUpload())
   app.use(cookie());
   app.use(session(sessionConfig));
 

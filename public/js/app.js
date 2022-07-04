@@ -20,7 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let element = `<div class="row" style="margin-bottom: 10px; clear: both;">
 				<div class="col-sm-5" style="position: relative;">
           <div style="width: 100px; height: 100px; object-fit: cover">
-					  <img src="${item.itemImage}" class="img-responsive" alt="${ item.itemName }" style="border-radius: 5px;">
+					  <img src="${item.itemImage}" class="img-responsive" alt="${
+      item.itemName
+    }" style="border-radius: 5px;">
           </div>
         </div>
 
@@ -58,7 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   $("#checkout").on("click", async (e) => {
-
     const itemsInCart = JSON.parse(jar.get("items"));
     const items = [];
 
@@ -66,25 +67,29 @@ document.addEventListener("DOMContentLoaded", () => {
       items.push(itemsInCart[k]);
     });
 
-    try
-    {
-      const {data} = await axios.post('/check/cart', {products: items});
-      
-      if(!data.result)
-      {
-        data.errorMessages.forEach(e => {
-          Swal.fire({ icon: 'error', title: `We have ${e.available} ${e.label} in stock lower it little`, text: 'Lower to available items', width: '40%'})
-        })
+    try {
+      const { data } = await axios.post("/check/cart", { products: items });
+
+      if (!data.result) {
+        data.errorMessages.forEach((e) => {
+          Swal.fire({
+            icon: "error",
+            title: `We have ${e.available} ${e.label} in stock lower it little`,
+            text: "Lower to available items",
+            width: "40%",
+          });
+        });
         return;
       }
-    }
-    catch(error)
-    {
-      Swal.fire({ icon: 'error', title: `Unexpected error, occured try your connection`, text: 'Try to refresh', width: '40%'})
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: `Unexpected error, occured try your connection`,
+        text: "Try to refresh",
+        width: "40%",
+      });
       return;
     }
-
-
 
     const { value } = await Swal.fire({
       title: "Your info",
@@ -117,14 +122,12 @@ document.addEventListener("DOMContentLoaded", () => {
     customer["id"] = user;
 
     try {
-      
       const { data } = await axios.post("http://localhost:7070/payment/cart", {
         items,
         customer,
       });
 
-      jar.remove('items');
-
+      jar.remove("items");
 
       window.location.href = data.url;
     } catch (ex) {

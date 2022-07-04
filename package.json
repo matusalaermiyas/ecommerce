@@ -21,6 +21,7 @@
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "datauri": "^4.1.0",
     "dayjs": "^1.11.1",
     "deep-email-validator": "^0.1.21",
     "deep-extend": "^0.6.0",
@@ -28,6 +29,7 @@
     "ejs": "^3.1.6",
     "express": "^4.17.3",
     "express-async-errors": "^3.1.1",
+    "express-fileupload": "^1.4.0",
     "express-formidable": "^1.2.0",
     "express-session": "^1.17.2",
     "joi": "^17.6.0",
@@ -38,6 +40,7 @@
     "nodemailer": "^6.7.3",
     "request": "^2.88.2",
     "searchjs": "^1.1.0",
+    "twilio": "^3.77.1",
     "uuid": "^8.3.2",
     "xss": "^1.0.11",
     "yenepaysdk": "^1.2.0"

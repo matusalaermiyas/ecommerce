@@ -7,6 +7,7 @@ const bcrypt = require('bcryptjs')
 
 const { Products, Admin } = require('../models');
 const { adminGuard } = require("../middlewares");
+const getImage = require('../config/decodeImage');
 
 router.get("/add", adminGuard, (req, res) => {
   return res.render("admin/add_product", {isLogged: req.session.isLogged});
@@ -52,10 +53,11 @@ router.post("/add", async (req, res) => {
 
   product.type = product.type.toLowerCase();
   product.status = product.status.toLowerCase();
+  const image = await getImage(req.files.image)
 
   await Products.create({
     ...product,
-    image: product.image_url,
+    image: image,
     created_at: day().format("DD/MM/YYYY"),
   });
 
@@ -72,11 +74,9 @@ function validate(data)
     discount: Joi.number().min(0).label("Discount"),
     tax_1: Joi.number().min(0).label("Tax"),
     description: Joi.string().required().label("Description"),
-    image: Joi.any().required(),
     price: Joi.number().min(0).required().label("Price"),
     type: Joi.string().valid('clothes', 'cosmetics', 'electronics', 'shoes'),
     status: Joi.string().valid('new', 'used'),
-    image_url: Joi.string().required(),
   })
 
   return schema.validate({...data})
