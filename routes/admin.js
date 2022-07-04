@@ -5,9 +5,13 @@ const Joi = require('joi');
 const bcrypt = require('bcryptjs')
 
 
+const cloudinary = require("cloudinary").v2;
+const streamifier = require("streamifier");
+
+
 const { Products, Admin } = require('../models');
 const { adminGuard } = require("../middlewares");
-const getImage = require('../config/decodeImage');
+
 
 router.get("/add", adminGuard, (req, res) => {
   return res.render("admin/add_product", {isLogged: req.session.isLogged});
@@ -24,9 +28,8 @@ router.post("/login", async (req, res) => {
 
   const matched = await bcrypt.compare(req.body.password, admin.password);
 
-  if (!matched) {
-    return res.redirect("/root/login");
-  }
+  if (!matched) return res.redirect("/root/login");
+  
 
   const token = jwt.sign({ isAdmin: admin.isAdmin }, process.env.JWT_SECRET_TOKEN, {
     expiresIn: "1h",
@@ -51,15 +54,25 @@ router.post("/add", async (req, res) => {
   if(error) return res.cookie('type', 'error').cookie('details', error.details[0].message).redirect('/root/add')
 
 
-  product.type = product.type.toLowerCase();
-  product.status = product.status.toLowerCase();
-  const image = await getImage(req.files.image)
 
-  await Products.create({
-    ...product,
-    image: image,
-    created_at: day().format("DD/MM/YYYY"),
-  });
+  
+  let cld_upload_stream = cloudinary.uploader.upload_stream(
+    {
+      folder: "ecommerce",
+    },
+    async  (error, result) => {
+      if(error) return res.send('Error while uploading try again.');
+      await Products.create({
+        ...product,
+        image: result.url,
+        created_at: day().format("DD/MM/YYYY"),
+      });
+    }
+  );
+
+  streamifier
+    .createReadStream(req.files.image.data)
+    .pipe(cld_upload_stream);
 
   res.cookie('type', 'success').cookie('details', 'Product added successfully').redirect('/root/add');
 });

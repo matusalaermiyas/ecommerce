@@ -1,14 +1,10 @@
 <%- include('../layouts/header', {"title": "Buy pal | Signup", "isLogged": isLogged, "userPage": true}) %> 
 <div class="animate__animated animate__fadeInDownBig col-sm-8">
     <h1 style="padding-left: 130px">Signup</h1>
+    
     <form action="/user/signup" class="form-horizontal" method="post" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="email" class="col-sm-2 control-label">Email</label>
-            <div class="col-sm-8">
-                <input type="email" name="email" class="form-control" id="email" placeholder="Put an existing email, it will be checked">
-            </div>
-        </div>
 
+        <%- include('../layouts/text_input', {"id": "phone", "label": "Phone", "type": "text"}) %> 
         <%- include('../layouts/text_input', {"id": "username", "label": "Username", "type": "text"}) %> 
         <%- include('../layouts/text_input', {"id": "password", "label": "Password", "type": "password"}) %>
     

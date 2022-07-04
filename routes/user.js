@@ -1,18 +1,22 @@
-const { validate } = require("deep-email-validator");
+require("dotenv").config();
+
 const Joi = require("joi");
 const bcrypt = require("bcryptjs");
 const router = require("express").Router();
 
+const cloudinary = require("cloudinary").v2;
+const streamifier = require("streamifier");
+
 const { checkIfUserLogged, guardUserRoute } = require("../middlewares");
 const { Users, Orders, Products, Rates } = require("../models");
-const getImage = require('../config/decodeImage');
+
 
 router.get("/signin", checkIfUserLogged, (req, res) => {
   return res.render("user/signin");
 });
 
 router.post("/signin", async (req, res) => {
-  const user = await Users.findOne({ email: req.body.email });
+  const user = await Users.findOne({ phone: req.body.phone });
   const url = "/user/signin";
 
   if (!user)
@@ -53,44 +57,47 @@ router.post("/signup", async (req, res) => {
       .redirect(url);
   }
 
-  const isValidEmail = await validate(formData.email);
-
-  if (!isValidEmail.valid) {
-    return res
-      .cookie("type", "error")
-      .cookie("details", "The email you entered doesn't exist")
-      .redirect(url);
-  }
-
-  const existingAccount = await Users.findOne({ email: formData.email });
+  const existingAccount = await Users.findOne({ phone: formData.phone });
 
   if (existingAccount) {
     return res
       .cookie("type", "error")
-      .cookie("details", "Email already taken try another one")
+      .cookie("details", "Phone already taken try another one")
       .redirect(url);
   }
 
-  const profilePicture = await getImage(req.files ? req.files.profile_picture : null);
+  let cld_upload_stream = cloudinary.uploader.upload_stream(
+    {
+      folder: "ecommerce",
+    },
+    async  (error, result) => {
+      if(error) return res.send('Error while uploading try again.');
 
-  
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(formData.password, salt);
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(formData.password, salt);
 
-  await Users.create({
-    username: formData.username,
-    email: formData.email,
-    password: hashedPassword,
-    profile_picture: profilePicture
-  });
+        await Users.create({
+      username: formData.username,
+      phone: formData.phone,
+      password: hashedPassword,
+      profile_picture: result.url,
+    });
+
+      
+    }
+  );
+
+  await streamifier
+    .createReadStream(req.files.profile_picture.data)
+    .pipe(cld_upload_stream);
+
 
   return res
     .cookie("type", "success")
     .cookie("details", "Account created successfully signin")
-    .redirect('/user/signin');
+    .redirect("/user/signin");
 });
 
-// Check if the user is logged in
 router.get("/profile", guardUserRoute, (req, res) => {
   return res.render("user/profile", {
     isLogged: req.session.isLogged,
@@ -141,7 +148,7 @@ router.post("/rate", guardUserRoute, async (req, res) => {
 
   if (error) return res.send(error.details[0].message);
 
-   await Rates.create({
+  await Rates.create({
     product: formData.product_id,
     rate: formData.rate,
     user: req.session.user_id,
@@ -160,7 +167,7 @@ router.get("/logout", guardUserRoute, (req, res) => {
 function validateSignup(data) {
   const schema = Joi.object({
     username: Joi.string().required().label("Username"),
-    email: Joi.string().email().label("Email"),
+    phone: Joi.string().required().label("Phone"),
     password: Joi.string().required("Password"),
   });
 

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  email: {
+  phone: {
     type: String,
     required: true,
     max: 1000,
@@ -19,7 +19,8 @@ const userSchema = new Schema({
     max: 5000
   },
   profile_picture: {
-    type: String
+    type: String,
+    default: "https://res.cloudinary.com/buypal/image/upload/v1656936853/ecommerce/output_qo5snz.png"
   },
   created_at: {
     type: Date,

@@ -1,16 +1,13 @@
-const router = require("express").Router();
-const mongoose = require("mongoose");
-const yenepay = require("yenepaysdk");
+require("dotenv").config();
+
 const day = require("dayjs");
+const mongoose = require("mongoose");
+const router = require("express").Router();
 const uuid = require("uuid");
+const yenepay = require("yenepaysdk");
 
+const { composeEmail, sendEmail, sendSms } = require("../utility");
 const { Orders, Products } = require("../models");
-
-const sendEmail = require("../utility/email");
-const sendSms = require("../utility/sms");
-
-const redirectURL = "/all";
-
 const {
   currency,
   cancelUrlReturn,
@@ -20,6 +17,9 @@ const {
   successUrlReturn,
   sellerCode,
 } = require("./yenepay_options");
+const respondToUser = require("../utility/respondToUser");
+
+const REDIRECT_URL = "/all";
 
 router.post("/express", async (req, res) => {
   const merchantOrderId = uuid.v4();
@@ -28,21 +28,15 @@ router.post("/express", async (req, res) => {
   let checkoutItem = req.body;
   const id = checkoutItem.product_id.trim();
 
-  if (!mongoose.isValidObjectId(id)) return res.redirect(redirectURL);
+  if (!mongoose.isValidObjectId(id)) return res.redirect(REDIRECT_URL);
 
   const selectedProduct = await Products.findById(checkoutItem.product_id);
 
   if (!selectedProduct)
-    return res
-      .cookie("type", "error")
-      .cookie("details", "Unexpected error product not found")
-      .redirect(redirectURL);
+    return respondToUser(res, "Unexpected error product not found");
 
   if (checkoutItem.Quantity > selectedProduct.item_in_stock)
-    return res
-      .cookie("type", "error")
-      .cookie("details", "The item you selected is out of stock")
-      .redirect(redirectURL);
+    return respondToUser(res, "The item you selected is out of stock");
 
   let order = new Orders({
     order_id: merchantOrderId,
@@ -120,19 +114,16 @@ router.post("/cart", async (req, res) => {
   for (let i = 0; i < checkoutItems.length; i++) {
     let id = checkoutItems[i].ItemId.trim();
 
-    if (!mongoose.isValidObjectId(id)) return res.redirect(redirectURL);
+    if (!mongoose.isValidObjectId(id)) return res.redirect(REDIRECT_URL);
 
     const item = await Products.findById(id);
 
     // Check if that item quantity is less
     if (checkoutItems[i].Quantity > item.item_in_stock)
-      return res
-        .cookie("type", "error")
-        .cookie(
-          "details",
-          `We have ${item.item_in_stock} ${item.title} in stock so lower a little`
-        )
-        .redirect(redirectURL);
+      return respondToUser(
+        res,
+        `We have ${item.item_in_stock} ${item.title} in stock so lower a little`
+      );
 
     items.push({
       itemName: item.title,
@@ -182,74 +173,42 @@ router.post("/cart", async (req, res) => {
   return res.json({ url });
 });
 
-router.post("/ipnurl", async (req, res) => {
-  const ipnModel = req.body;
-
-  try {
-    const ipnStatus = yenepay.checkout.IsIPNAuthentic(ipnModel, useSandbox);
-    return res.json({ "IPN Status": ipnStatus });
-  } catch (ex) {
-    console.log("Error in /ipnurl catch block");
-    return res.json({ Error: ex });
-  }
-});
-
 router.get("/success", async (req, res) => {
   const params = req.query;
 
-  if (params.Status == "Paid") {
-    const order = await Orders.findOne({ order_id: params.MerchantOrderId });
+  if (param.Status !== "Paid")
+    return respondToUser(res, "Payment failed try again");
 
-    if (!order) return;
+  const order = await Orders.findOne({ order_id: params.MerchantOrderId });
 
-    order.payed = true;
-    await order.save();
+  if (!order) return;
 
-    if (order.items.length == 1) {
-      let item = order.items[0];
-      let product = await Products.findById(item.product);
+  order.payed = true;
+  await order.save();
 
-      product.item_in_stock -= item.quantity;
+  if (order.items.length == 1) {
+    let item = order.items[0];
+    let product = await Products.findById(item.product);
+
+    product.item_in_stock -= item.quantity;
+    await product.save();
+  } else if (order.items.length > 1) {
+    order.items.forEach(async (i) => {
+      let product = await Products.findById(i.product);
+      product.item_in_stock -= i.quantity;
       await product.save();
-    } else if (order.items.length > 1) {
-      order.items.forEach(async (i) => {
-        let product = await Products.findById(i.product);
-        product.item_in_stock -= i.quantity;
-        await product.save();
-      });
-    }
-
-    const message = order.items.map((o) => {
-      return `<h2>${o.itemName}</h2><ul><li>Quantity: ${o.quantity}</li><li>Price: ${o.price}</li><li>Total amount with tax: ${params.TotalAmount}</li><li>User: ${order.buyerName}</li><li>Phone Number: ${order.phone}</li></ul>`;
     });
+  }
 
-    sendEmail(message); // Send the email to the admin to proceess the order
-    sendMessage(order.phone, "Payed successfully will start delivery.");
+  sendEmail(composeEmail(order));
+  sendSms(order.phone, "Payed successfully will start delivery.");
 
-    return res
-      .cookie("type", "success")
-      .cookie("details", "Your ordered successfully")
-      .redirect(redirectURL);
-  } // end payment status == 'Paid'
-
-  return res
-    .cookie("type", "error")
-    .cookie("details", "Payment failed try again")
-    .redirect(redirectURL);
+  return respondToUser(res, "Your ordered successfully", "success");
 });
 
-router.get("/cancel", async (req, res) => {
-  return res
-    .cookie("type", "error")
-    .cookie("details", "You canceled the payment, we look forward to serve you")
-    .redirect(redirectURL);
-});
 
-router.get("/failed", (req, res) => {
-  return res
-    .cookie("type", "error")
-    .cookie("details", "Payment failed try again")
-    .redirect(redirectURL);
-});
+router.get('/cancel', (req, res) => respondToUser(res, "You canceled the payment, we look forward to serve you"))
+
+router.get('/failed', (req, res) => respondToUser(res, 'Payment failed try again'))
 
 module.exports = router;

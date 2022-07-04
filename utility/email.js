@@ -1,5 +1,7 @@
 const nodemailer = require("nodemailer");
 
+require('dotenv').config()
+
 const sendEmail = async (messages) => {
   let html = "";
 

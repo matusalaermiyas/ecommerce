@@ -1,5 +1,7 @@
 const axios = require("axios");
 
+require('dotenv').config()
+
 const sendSms = async (phoneNumber, message) => {
   const data = JSON.stringify({
     phone: phoneNumber,

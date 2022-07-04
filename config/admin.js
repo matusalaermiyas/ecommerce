@@ -26,9 +26,7 @@ const router = AdminJSExpress.buildAuthenticatedRouter(adminJs, {
       if(admin)
       {
         const matched = await bcrypt.compare(password, admin.password);
-
         if(matched) return admin;
-        
       }
       
       return false;
