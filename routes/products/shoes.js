@@ -1,6 +1,6 @@
 const shoesRouter = require("express").Router();
 
-const {Products} = require("../models");
+const {Products} = require("../../models");
 
 shoesRouter.get("/", async (req, res) => {
   const currentPage = req.query.page ? req.query.page : 1;

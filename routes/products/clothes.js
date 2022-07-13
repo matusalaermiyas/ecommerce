@@ -1,36 +1,35 @@
-const electronicsRouter = require("express").Router();
+const clothesRouter = require("express").Router();
 
-const {Products} = require("../models");
+const { Products } = require("../../models");
 
-electronicsRouter.get("/", async (req, res) => {
+clothesRouter.get("/", async (req, res) => {
   const currentPage = req.query.page ? req.query.page : 1;
   const pageSize = 6;
   const skip = (currentPage - 1) * pageSize;
 
   const count = await Products.find({})
     .where("type")
-    .equals("electronics")
+    .equals("clothes")
     .where("item_in_stock")
     .gt(0);
 
   const pagination = Math.ceil(count / pageSize);
 
-  const electronics = await Products.find({})
+  const clothes = await Products.find()
     .where("type")
-    .equals("electronics")
+    .equals("clothes")
     .where("item_in_stock")
     .gt(0)
     .skip(skip)
     .limit(pageSize);
 
-
-  return res.render("products/electronics", {
-    products: electronics,
-    page: "/electronics",
+  return res.render("products/clothes", {
+    products: clothes,
+    page: "/clothes",
     pages: pagination,
     currentPage: currentPage,
     isLogged: req.session.isLogged,
   });
 });
 
-module.exports = electronicsRouter;
+module.exports = clothesRouter;

@@ -76,26 +76,17 @@
 <script src="/js/jar.amd.min.js"></script>
 <script src="/js/sweetalert.min.js"></script>
 <script src="/raty/jquery.raty.min.js"></script>
+<script src="/aos/aos.js"></script>
 <script src="/js/activate_bars.js"></script>
 <script>
+    AOS.init();
+
     const type=  jar.get('type');
     const details = decodeURI(jar.get('details'))
 
-    switch(type)
-    {
-        // you can include one option at last to specify the width
-        case 'error':
-            Swal.fire({ icon: 'error', title: 'Error', text: details})
-            break;
-        
-        case 'success':
-            Swal.fire( 'Success', details, 'success' )
-            break;
-
-        case 'info':
-            Swal.fire({ icon: 'info', title: 'Info', text: details})
-            break;
-    }
+    if(type === 'error') Swal.fire({ icon: 'error', title: 'Error', text: details})
+    else if(type === 'success') Swal.fire( 'Success', details, 'success' )
+    else if(type === 'info') Swal.fire({ icon: 'info', title: 'Info', text: details})
 
     jar.remove('type')
     jar.remove('details')

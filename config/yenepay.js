@@ -38,6 +38,10 @@ router.post("/express", async (req, res) => {
   if (checkoutItem.Quantity > selectedProduct.item_in_stock)
     return respondToUser(res, "The item you selected is out of stock");
 
+  if (checkoutItem.phone.startsWith("0"))
+    checkoutItem.phone =
+      "+251" + checkoutItem.phone.substring(1, checkoutItem.phone.length);
+
   let order = new Orders({
     order_id: merchantOrderId,
     buyerName: checkoutItem.buyerName,
@@ -176,7 +180,7 @@ router.post("/cart", async (req, res) => {
 router.get("/success", async (req, res) => {
   const params = req.query;
 
-  if (param.Status !== "Paid")
+  if (params.Status !== "Paid")
     return respondToUser(res, "Payment failed try again");
 
   const order = await Orders.findOne({ order_id: params.MerchantOrderId });
@@ -200,15 +204,18 @@ router.get("/success", async (req, res) => {
     });
   }
 
-  sendEmail(composeEmail(order));
+  sendEmail(composeEmail(order, params.TotalAmount));
   sendSms(order.phone, "Payed successfully will start delivery.");
 
   return respondToUser(res, "Your ordered successfully", "success");
 });
 
+router.get("/cancel", (req, res) =>
+  respondToUser(res, "You canceled the payment, we look forward to serve you")
+);
 
-router.get('/cancel', (req, res) => respondToUser(res, "You canceled the payment, we look forward to serve you"))
-
-router.get('/failed', (req, res) => respondToUser(res, 'Payment failed try again'))
+router.get("/failed", (req, res) =>
+  respondToUser(res, "Payment failed try again")
+);
 
 module.exports = router;

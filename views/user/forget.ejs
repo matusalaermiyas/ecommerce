@@ -1,0 +1,16 @@
+<%- include('../layouts/header', {"title": "BuyPal | Forget Password", userPage: true}) %>
+
+<form action="/user/forget" method="POST" class="col-sm-6">
+    <div class="form-group">
+        <label for="search">Type your phone number</label>
+        <input type="tel" name="phone" id="search" class="form-control">
+    </div>
+    
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
+
+
+
+<%- include('../layouts/footer') %> 

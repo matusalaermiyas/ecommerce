@@ -1,6 +1,6 @@
 const cosmeticsRouter = require("express").Router();
 
-const {Products} = require("../models");
+const {Products} = require("../../models");
 
 cosmeticsRouter.get("/", async (req, res) => {
   const currentPage = req.query.page ? req.query.page : 1;

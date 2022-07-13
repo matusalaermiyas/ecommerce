@@ -50,8 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
         "style",
         "height: 100px !important; object-fit: cover"
       );
-    } else {
-      $navbar.addClass("hidden-xs animate__animated animate__backOutUp");
-    }
+    } else $navbar.addClass("hidden-xs animate__animated animate__backOutUp");
   });
 });
