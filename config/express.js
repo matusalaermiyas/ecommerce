@@ -20,6 +20,7 @@ const {
   check,
   clothes,
   cosmetics,
+  delivery,
   done,
   electronics,
   home,
@@ -49,11 +50,12 @@ module.exports = (app) => {
   app.use("/check", check);
   app.use("/clothes", clothes);
   app.use("/cosmetics", cosmetics);
+  app.use("/delivery", delivery);
+  app.use("/done", done);
   app.use("/electronics", electronics);
   app.use("/payment", payment);
   app.use("/shoes", shoes);
   app.use("/org", org);
-  app.use("/done", done);
   app.use("/user", user);
   app.use(_404);
   app.use(error);

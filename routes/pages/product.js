@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const s = require("searchjs");
 
-const { Products, Rates } = require("../models");
+const { Products, Rates } = require("../../models");
 
 router.get("/:id", async (req, res) => {
   const product = await Products.findById(req.params.id);

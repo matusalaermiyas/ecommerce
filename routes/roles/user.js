@@ -8,9 +8,9 @@ const cryptr = new Cryptr(process.env.JWT_SECRET_TOKEN);
 const cloudinary = require("cloudinary").v2;
 const streamifier = require("streamifier");
 
-const { checkIfUserLogged, guardUserRoute } = require("../middlewares");
-const { Users, Orders, Products, Rates } = require("../models");
-const { respondToUser, validation, sendSms } = require("../utility");
+const { checkIfUserLogged, guardUserRoute } = require("../../middlewares");
+const { Users, Orders, Products, Rates } = require("../../models");
+const { respondToUser, validation, sendSms } = require("../../utility");
 
 router.get("/signin", checkIfUserLogged, (req, res) =>
   res.render("user/signin")
@@ -21,7 +21,7 @@ router.post("/signin", async (req, res) => {
   const url = "/user/signin";
 
   if (!user)
-    return respondToUser(res, "Invalid email or password", "error", url);
+    return respondToUser(res, "Invalid Phone or password", "error", url);
 
   const validPassword =
     cryptr.decrypt(user.password) == req.body.password ? true : false;

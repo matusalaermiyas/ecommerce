@@ -1,0 +1,41 @@
+<%- include('../layouts/header', {"title": "BuyPal | Assign Task"}) %>
+
+<div class="animate__animated animate__fadeInDownBig col-sm-8 col-md-offset-1">
+    <p>Assign the following orders to deliveries</p>
+    <table class="table" style="margin-top: 20px;">
+        <thead>
+            <th>Order Id</th>
+            <th>Buyer Name</th>
+            <th>Phone</th>
+            <th>Assign to Delivery</th>
+            <th></th>
+        </thead>
+
+        <tbody>
+            <% orders.forEach(o => { %>
+                <tr>
+                    <td><%=o._id%> </td>
+                    <td><%=o.buyerName%> </td>
+                    <td><%=o.phone%></td>
+                    <form action="/root/assign-to-delivery" method="POST">
+                        <input type="hidden" name="order" value="<%=o._id%>">
+                    <td>
+                            <select name="delivery">
+                                <option>Select Delivery Man</option>
+                                <% deliveryEmployees.forEach(d => { %>
+                                    <option value="<%=d._id%>"><%=d.email%></option>
+                                <% }) %>
+                            </select>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-primary">Assign</button>
+                    </td>
+                    </form>
+                </tr>
+            <% }) %>
+        </tbody>
+
+
+    </table>
+</div>
+<%- include('../layouts/footer') %>

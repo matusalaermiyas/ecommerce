@@ -5,19 +5,21 @@ const cosmetics = require("./products/cosmetics");
 const electronics = require("./products/electronics");
 
 
-const admin = require("./admin");
-const done = require("./done_page");
-const home = require('./home');
-const org = require("./org");
-const product = require("./product");
-const user = require("./user");
-const check = require('./checkCartQuantity');
+const admin = require("./roles/admin");
+const delivery = require('./roles/delivery')
+const done = require("./pages/done_page");
+const home = require('./pages/home');
+const org = require("./pages/org");
+const product = require("./pages/product");
+const user = require("./roles/user");
+const check = require('./validation/checkCartQuantity');
 
 module.exports = {
   admin,
   allProducts,
   clothes,
   cosmetics,
+  delivery,
   done,
   electronics,
   home,

@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const { Products } = require("../models");
+const { Products } = require("../../models");
 
 const _ = require("lodash");
 

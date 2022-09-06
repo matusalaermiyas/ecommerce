@@ -42,6 +42,7 @@
     "morgan": "^1.10.0",
     "node-fetch": "^2.6.7",
     "nodemailer": "^6.7.3",
+    "nodemailer-sendgrid-transport": "^0.2.0",
     "nodemon": "^2.0.19",
     "request": "^2.88.2",
     "searchjs": "^1.1.0",

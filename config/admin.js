@@ -4,7 +4,7 @@ const AdminJSMongoose = require('@adminjs/mongoose')
 
 const bcrypt = require('bcryptjs')
 
-const { Admin, Orders, Products, Rates,  Users} = require('../models');
+const { Admin, Delivery, DeliveryItem, Orders, Products, Rates,  Users} = require('../models');
 
 AdminJS.registerAdapter(AdminJSMongoose)
 
@@ -14,7 +14,9 @@ const adminJs = new AdminJS({
       {resource: Orders},
       {resource: Users},
       {resource: Rates},
-      {resource: Admin}
+      {resource: Admin},
+      {resource: Delivery},
+      {resource: DeliveryItem}
   ],
   rootPath: '/admin',
 })

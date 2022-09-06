@@ -1,0 +1,23 @@
+<%- include('../layouts/header', {"title": "BuyPal | Seeing Details"}) %>
+
+<div class="animate__animated animate__fadeInDownBig col-sm-8 col-md-offset-1">
+    <p>Order item detail</p>
+    <table class="table" style="margin-top: 20px;">
+        <thead>
+            <th>Item Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </thead>
+
+        <tbody>
+            <% order.order.items.forEach(o => { %> 
+                <td><%=o.itemName%></td>
+                <td><%=o.quantity%></td>
+                <td><%=o.price%></td>
+            <% }) %> 
+        </tbody>
+
+
+    </table>
+</div>
+<%- include('../layouts/footer') %>

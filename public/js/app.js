@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   Object.keys(cartItems).forEach((k) => {
     let item = cartItems[k];
     let element = `<div class="row" style="margin-bottom: 10px; clear: both;">
-				<div class="col-sm-5" style="position: relative;">
+				<div class="col-sm-5" style="position: relative; width: max-content">
           <div style="width: 100px; height: 100px; object-fit: cover">
 					  <img src="${item.itemImage}" class="img-responsive" alt="${
       item.itemName
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				</div>
 				</div>`;
 
-    $("#root").append(element);
+    $("#root").prepend(element)
   });
 
   $(".remove").on("click", function (e) {

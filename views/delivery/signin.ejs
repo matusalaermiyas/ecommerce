@@ -1,0 +1,15 @@
+<%- include('../layouts/header', {"title": "BuyPal | Delivery Login"}) %>
+
+<div class="animate__animated animate__fadeInDownBig col-sm-8 col-md-offset-1">
+   <h1 style="padding-left: 125px; font-weight: bold;">Delivery</h1>
+   <br>
+   <form action="/delivery/login" method="post" class="form-horizontal">
+       <%- include('../layouts/text_input.ejs', {'id': 'email', 'type': 'email', 'label': 'Email'}) %> 
+       <%- include('../layouts/text_input.ejs', {'id': 'password', 'type': 'password', 'label': 'Passsword'}) %> 
+       <div class="form-group">
+           <label for="btn" class="col-sm-2 control-label"> </label>
+           <button type="submit" class="btn btn-primary" id="btn" style="margin-left: 15px;">Login</button>
+       </div>
+   </form>
+</div>
+<%- include('../layouts/footer') %>
